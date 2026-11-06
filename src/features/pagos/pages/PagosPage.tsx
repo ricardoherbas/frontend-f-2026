@@ -26,7 +26,7 @@ export default function PagosPage() {
   const puedeEliminar = tieneRol(rol, ['administrador']);
 
   const { data, isLoading, error } = usePagos();
-  const pacientes = usePacienteOpciones();
+  const { nombreDe } = usePacienteOpciones();
   const guardar = useGuardarPago();
   const eliminar = useEliminarPago();
 
@@ -41,9 +41,9 @@ export default function PagosPage() {
     const q = busqueda.trim().toLowerCase();
     return (data ?? [])
       .filter((p) => !estado || p.estado === estado)
-      .filter((p) => !q || pacientes.nombreDe(p.paciente_id).toLowerCase().includes(q))
+      .filter((p) => !q || nombreDe(p.paciente_id).toLowerCase().includes(q))
       .sort((a, b) => b.periodo.localeCompare(a.periodo));
-  }, [data, estado, busqueda, pacientes.nombreDe]);
+  }, [data, estado, busqueda, nombreDe]);
 
   const totales = useMemo(() => {
     const suma = (e: EstadoPago) => filtrados.filter((p) => p.estado === e).reduce((acc, p) => acc + Number(p.monto), 0);
@@ -93,7 +93,7 @@ export default function PagosPage() {
             clave={(p) => p.id}
             columnas={[
               { titulo: 'Período', render: (p) => formatPeriodo(p.periodo) },
-              { titulo: 'Paciente', render: (p) => pacientes.nombreDe(p.paciente_id) },
+              { titulo: 'Paciente', render: (p) => nombreDe(p.paciente_id) },
               { titulo: 'Monto', render: (p) => formatMoneda(p.monto) },
               { titulo: 'Estado', render: (p) => <Badge tono={TONO_ESTADO_PAGO[p.estado]}>{ETIQUETA_ESTADO_PAGO[p.estado]}</Badge> },
               { titulo: 'Medio', render: (p) => (p.medio_pago ? ETIQUETA_MEDIO_PAGO[p.medio_pago] : '—') },
@@ -114,7 +114,7 @@ export default function PagosPage() {
 
       {puedeEditar && <RegistrarCobroModal
         pago={aCobrar}
-        nombrePaciente={aCobrar ? pacientes.nombreDe(aCobrar.paciente_id) : ''}
+        nombrePaciente={aCobrar ? nombreDe(aCobrar.paciente_id) : ''}
         enviando={guardar.isPending}
         error={errorCobro}
         onCerrar={() => setACobrar(null)}
@@ -131,7 +131,7 @@ export default function PagosPage() {
       <ConfirmDialog
         abierto={aEliminar !== null}
         titulo="Eliminar pago"
-        mensaje={errorEliminar ?? `¿Eliminar el pago de ${aEliminar ? pacientes.nombreDe(aEliminar.paciente_id) : ''} (${aEliminar ? formatPeriodo(aEliminar.periodo) : ''})? Esta acción no se puede deshacer.`}
+        mensaje={errorEliminar ?? `¿Eliminar el pago de ${aEliminar ? nombreDe(aEliminar.paciente_id) : ''} (${aEliminar ? formatPeriodo(aEliminar.periodo) : ''})? Esta acción no se puede deshacer.`}
         cargando={eliminar.isPending}
         onConfirmar={confirmarEliminar}
         onCancelar={() => { setAEliminar(null); setErrorEliminar(null); }}

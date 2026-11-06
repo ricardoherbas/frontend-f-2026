@@ -22,7 +22,7 @@ export default function TratamientosPage() {
   const puedeEliminar = tieneRol(rol, ['administrador']);
 
   const { data, isLoading, error } = useTratamientos();
-  const pacientes = usePacienteOpciones(); // la cuidadora no puede listar pacientes: cae a "Paciente #id"
+  const { nombreDe } = usePacienteOpciones(); // la cuidadora no puede listar pacientes: cae a "Paciente #id"
   const eliminar = useEliminarTratamiento();
 
   const [busqueda, setBusqueda] = useState('');
@@ -36,11 +36,11 @@ export default function TratamientosPage() {
       .filter((t) => (estado === 'todos' ? true : estado === 'activos' ? t.activa : !t.activa))
       .filter((t) =>
         !q ||
-        pacientes.nombreDe(t.paciente_id).toLowerCase().includes(q) ||
+        nombreDe(t.paciente_id).toLowerCase().includes(q) ||
         (t.medicamento?.nombre ?? '').toLowerCase().includes(q),
       )
-      .sort((a, b) => pacientes.nombreDe(a.paciente_id).localeCompare(pacientes.nombreDe(b.paciente_id), 'es'));
-  }, [data, busqueda, estado, pacientes.nombreDe]);
+      .sort((a, b) => nombreDe(a.paciente_id).localeCompare(nombreDe(b.paciente_id), 'es'));
+  }, [data, busqueda, estado, nombreDe]);
 
   const confirmarEliminar = () => {
     if (!aEliminar) return;
@@ -78,12 +78,12 @@ export default function TratamientosPage() {
             filas={filtrados}
             clave={(t) => t.id}
             columnas={[
-              { titulo: 'Paciente', render: (t) => pacientes.nombreDe(t.paciente_id) },
+              { titulo: 'Paciente', render: (t) => nombreDe(t.paciente_id) },
               { titulo: 'Medicamento', render: (t) => t.medicamento ? `${t.medicamento.nombre} · ${t.medicamento.presentacion}` : `Medicamento #${t.medicamento_id}` },
               { titulo: 'Dosis', render: (t) => t.dosis },
               { titulo: 'Frecuencia', render: (t) => t.frecuencia },
               { titulo: 'Horario', render: (t) => t.horario ?? '—' },
-              { titulo: 'Vigencia', render: textoVigencia },
+              { titulo: 'Vigencia', render: (t) => textoVigencia(t) },
               { titulo: 'Estado', render: (t) => <Badge tono={t.activa ? 'ok' : 'neutro'}>{t.activa ? 'En curso' : 'Finalizado'}</Badge> },
             ]}
             acciones={puedeEditar ? (t) => (
@@ -95,10 +95,11 @@ export default function TratamientosPage() {
           />
         </StateView>
       </div>
+
       <ConfirmDialog
         abierto={aEliminar !== null}
         titulo="Eliminar tratamiento"
-        mensaje={errorEliminar ?? `¿Eliminar el tratamiento de ${aEliminar ? pacientes.nombreDe(aEliminar.paciente_id) : ''}? Esta acción no se puede deshacer. Si el tratamiento terminó, conviene marcarlo como finalizado.`}
+        mensaje={errorEliminar ?? `¿Eliminar el tratamiento de ${aEliminar ? nombreDe(aEliminar.paciente_id) : ''}? Esta acción no se puede deshacer.`}
         cargando={eliminar.isPending}
         onConfirmar={confirmarEliminar}
         onCancelar={() => { setAEliminar(null); setErrorEliminar(null); }}
