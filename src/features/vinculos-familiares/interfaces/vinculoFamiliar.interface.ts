@@ -7,14 +7,18 @@ export interface VinculoFamiliar {
   paciente_id: number;
   parentesco: string;
   es_contacto_principal: boolean;
-  /** el listado NO lo devuelve solo llega al crear o regenerar el codigo. */
+  /** El listado no devuelve este campo; llega al crear o regenerar el código. */
   codigo_vinculacion?: string | null;
   codigo_usado: boolean;
-  /** Fecha/hora de vencimiento del codigo (ISO). */
+  /** Fecha y hora de vencimiento del código (ISO). */
   expira_en: string;
   activo: boolean;
   creado_en: string;
-  familiar?: { id: number; persona_id: number; persona?: Persona };
+  familiar?: {
+    id: number;
+    persona_id: number;
+    persona?: Persona;
+  };
   paciente?: Paciente;
 }
 
@@ -24,12 +28,13 @@ export interface DatosCrearVinculo {
   parentesco: string;
   es_contacto_principal?: boolean;
 }
+
 export type DatosActualizarVinculo = Partial<DatosCrearVinculo>;
 
-/** Respuesta de POST / y de PATCH /:id/regenerar-codigo (el codigo nuevo viene en `vinculo`). */
+/** Respuesta de POST / y PATCH /:id/regenerar-codigo. */
 export interface RespuestaCodigoVinculo {
   mensaje: string;
-  vinculo: Pick<VinculoFamiliar, 'id' | 'familiar_id' | 'paciente_id' | 'parentesco' | 'es_contacto_principal'> & {
+  vinculo: {
     codigo_vinculacion: string;
     expira_en: string;
   };
