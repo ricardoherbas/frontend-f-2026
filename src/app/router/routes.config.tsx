@@ -1,3 +1,4 @@
+
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { Rol } from '@/core/permissions/roles';
 
@@ -38,22 +39,36 @@ export const RUTAS_PRIVADAS: RutaApp[] = [
   { path: '/pacientes/:id/editar', etiqueta: 'Editar paciente', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/pacientes/pages/PacienteFormPage')) },
 
   { path: '/familiares', etiqueta: 'Familiares', roles: ADMIN_SEC, menu: true, Componente: lazy(() => import('@/features/familiares/pages/FamiliaresPage')) },
+  { path: '/familiares/:id', etiqueta: 'Ficha del familiar', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/familiares/pages/FamiliarDetallePage')) },
+  { path: '/familiares/:id/editar', etiqueta: 'Editar familiar', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/familiares/pages/FamiliarFormPage')) },
+
   { path: '/vinculos-familiares', etiqueta: 'Vínculos y QR', roles: ADMIN_SEC, menu: true, Componente: lazy(() => import('@/features/vinculos-familiares/pages/VinculosPage')) },
+
   { path: '/cuidadoras', etiqueta: 'Cuidadoras', roles: ADMIN_SEC, menu: true, Componente: lazy(() => import('@/features/cuidadoras/pages/CuidadorasPage')) },
+  { path: '/cuidadoras/:id', etiqueta: 'Ficha de cuidadora', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/cuidadoras/pages/CuidadoraDetallePage')) },
+  { path: '/cuidadoras/:id/editar', etiqueta: 'Editar cuidadora', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/cuidadoras/pages/CuidadoraFormPage')) },
+
   { path: '/turnos', etiqueta: 'Turnos', roles: ADMIN_SEC_CUID, menu: true, Componente: lazy(() => import('@/features/turnos/pages/TurnosPage')) },
+  { path: '/turnos/:id', etiqueta: 'Ficha de turno', roles: ADMIN_SEC_CUID, Componente: lazy(() => import('@/features/turnos/pages/TurnoDetallePage')) },
+
   { path: '/asignaciones', etiqueta: 'Asignaciones', roles: ADMIN_SEC_CUID, menu: true, Componente: lazy(() => import('@/features/asignaciones/pages/AsignacionesPage')) },
+  { path: '/asignaciones/:id', etiqueta: 'Ficha de asignación', roles: ADMIN_SEC_CUID, Componente: lazy(() => import('@/features/asignaciones/pages/AsignacionDetallePage')) },
+
   { path: '/medicamentos', etiqueta: 'Medicamentos', roles: ADMIN_SEC_CUID, menu: true, Componente: lazy(() => import('@/features/medicamentos/pages/MedicamentosPage')) },
 
   { path: '/tratamientos', etiqueta: 'Tratamientos', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/tratamientos/pages/TratamientosPage')) },
   { path: '/tratamientos/nuevo', etiqueta: 'Nuevo tratamiento', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/tratamientos/pages/TratamientoFormPage')) },
+  { path: '/tratamientos/:id', etiqueta: 'Ficha de tratamiento', roles: TODOS, Componente: lazy(() => import('@/features/tratamientos/pages/TratamientoDetallePage')) },
   { path: '/tratamientos/:id/editar', etiqueta: 'Editar tratamiento', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/tratamientos/pages/TratamientoFormPage')) },
 
   { path: '/partes-diarios', etiqueta: 'Partes diarios', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/partes-diarios/pages/PartesDiariosPage')) },
   { path: '/partes-diarios/nuevo', etiqueta: 'Nuevo parte diario', roles: ADMIN_SEC_CUID, Componente: lazy(() => import('@/features/partes-diarios/pages/ParteDiarioFormPage')) },
+  { path: '/partes-diarios/:id', etiqueta: 'Ficha de parte diario', roles: TODOS, Componente: lazy(() => import('@/features/partes-diarios/pages/ParteDiarioDetallePage')) },
   { path: '/partes-diarios/:id/editar', etiqueta: 'Editar parte diario', roles: ADMIN_SEC_CUID, Componente: lazy(() => import('@/features/partes-diarios/pages/ParteDiarioFormPage')) },
 
   { path: '/pagos', etiqueta: 'Pagos', roles: ADMIN_SEC_FAM, menu: true, Componente: lazy(() => import('@/features/pagos/pages/PagosPage')) },
   { path: '/pagos/nuevo', etiqueta: 'Nuevo pago', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/pagos/pages/PagoFormPage')) },
+  { path: '/pagos/:id', etiqueta: 'Ficha de pago', roles: ADMIN_SEC_FAM, Componente: lazy(() => import('@/features/pagos/pages/PagoDetallePage')) },
   { path: '/pagos/:id/editar', etiqueta: 'Editar pago', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/pagos/pages/PagoFormPage')) },
 
   { path: '/perfil', etiqueta: 'Mi perfil', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/perfil/pages/PerfilPage')) },
