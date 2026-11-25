@@ -21,13 +21,9 @@ export default function RegistroFamiliarPage() {
     defaultValues: { codigo_vinculacion: params.get('codigo') ?? '' },
   });
 
-  const alEnviar = handleSubmit(async ({ repetir: _repetir, fecha_nacimiento, telefono, ...datos }) => {
+  const alEnviar = handleSubmit(async ({ repetir: _repetir, ...datos }) => {
     try {
-      await authService.registrarFamiliar({
-        ...datos,
-        fecha_nacimiento: fecha_nacimiento || null,
-        telefono: telefono || null,
-      });
+      await authService.registrarFamiliar(datos);
       setResultado({ ok: true, texto: 'Tu cuenta fue creada. Ya podés iniciar sesión.' });
     } catch (e) {
       setResultado({ ok: false, texto: obtenerMensajeError(e) });
@@ -52,13 +48,6 @@ export default function RegistroFamiliarPage() {
       <form className="form-grid" onSubmit={alEnviar} noValidate>
         {resultado && <div className="aviso aviso-error" role="alert">{resultado.texto}</div>}
         <FormField etiqueta="Código de vinculación" autoComplete="off" error={errors.codigo_vinculacion?.message} {...register('codigo_vinculacion')} />
-        <div className="form-grid dos">
-          <FormField etiqueta="Nombre" autoComplete="given-name" error={errors.nombre?.message} {...register('nombre')} />
-          <FormField etiqueta="Apellido" autoComplete="family-name" error={errors.apellido?.message} {...register('apellido')} />
-          <FormField etiqueta="DNI" inputMode="numeric" error={errors.dni?.message} {...register('dni')} />
-          <FormField etiqueta="Teléfono (opcional)" type="tel" autoComplete="tel" error={errors.telefono?.message} {...register('telefono')} />
-        </div>
-        <FormField etiqueta="Fecha de nacimiento (opcional)" type="date" error={errors.fecha_nacimiento?.message} {...register('fecha_nacimiento')} />
         <FormField etiqueta="Email" type="email" autoComplete="email" error={errors.email?.message} {...register('email')} />
         <FormField etiqueta="Contraseña" type="password" autoComplete="new-password" error={errors.password?.message} {...register('password')} />
         <FormField etiqueta="Repetir contraseña" type="password" autoComplete="new-password" error={errors.repetir?.message} {...register('repetir')} />

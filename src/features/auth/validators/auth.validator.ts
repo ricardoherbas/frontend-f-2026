@@ -27,11 +27,6 @@ export type RestablecerForm = z.infer<typeof restablecerSchema>;
 export const registroFamiliarSchema = z
   .object({
     codigo_vinculacion: z.string().min(1, 'Ingresá el código de vinculación'),
-    nombre: z.string().min(1, 'Ingresá tu nombre'),
-    apellido: z.string().min(1, 'Ingresá tu apellido'),
-    dni: z.string().min(1, 'Ingresá tu DNI'),
-    fecha_nacimiento: z.string().optional(),
-    telefono: z.string().optional(),
     email: z.string().min(1, 'Ingresá tu email').email('El email no es válido'),
     password,
     repetir: z.string(),

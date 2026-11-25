@@ -26,17 +26,9 @@ export interface PerfilUsuario extends UsuarioSesion {
   persona: Persona;
 }
 
-/**
- * POST /auth/registro. El validador del backend exige además nombre,
- * apellido y dni (aunque el service solo usa código, email y password).
- */
+/** POST /auth/registro: registro familiar mediante código de vinculación */
 export interface DatosRegistroFamiliar {
   codigo_vinculacion: string;
-  nombre: string;
-  apellido: string;
-  dni: string;
-  fecha_nacimiento?: string | null;
-  telefono?: string | null;
   email: string;
   password: string;
 }
