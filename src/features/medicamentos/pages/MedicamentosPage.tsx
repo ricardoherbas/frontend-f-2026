@@ -158,13 +158,15 @@ export default function MedicamentosPage() {
   const [aEliminar, setAEliminar] = useState<Medicamento | null>(null);
   const [errorEliminar, setErrorEliminar] = useState<string | null>(null);
 
-  const { data, isLoading, error } = useMedicamentosPaginado({
+  const filtros = {
     page: pagina,
     limit: LIMITE_POR_PAGINA,
     search: busquedaAplicada || undefined,
     sortBy: 'nombre',
-    order: 'ASC',
-  });
+    order: 'ASC' as const,
+  };
+
+  const { data, isLoading, error } = useMedicamentosPaginado(filtros);
 
   const medicamentos = data?.datos ?? [];
   const total = data?.paginacion.total ?? 0;
@@ -247,6 +249,7 @@ export default function MedicamentosPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <p>

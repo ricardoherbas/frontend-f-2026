@@ -318,6 +318,7 @@ export default function TratamientosPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <StateView

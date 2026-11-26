@@ -231,6 +231,7 @@ export default function CuidadorasPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <StateView

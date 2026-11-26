@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type {
   DatosActualizarTratamiento,
   DatosCrearTratamiento,
@@ -15,15 +15,7 @@ export interface FiltrosTratamientos {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaTratamientosPaginada {
-  datos: Tratamiento[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaTratamientosPaginada = Paginado<Tratamiento>;
 
 const crudApi = crearCrudApi<
   Tratamiento,
@@ -34,14 +26,5 @@ const crudApi = crearCrudApi<
 export const tratamientoService = {
   ...crudApi,
 
-  listarPaginado: async (
-    filtros: FiltrosTratamientos,
-  ): Promise<RespuestaTratamientosPaginada> => {
-    const respuesta = await httpClient.get<RespuestaTratamientosPaginada>(
-      '/tratamientos',
-      { params: filtros },
-    );
-
-    return respuesta.data;
-  },
+  listarPaginado: crearListadoPaginadoApi<Tratamiento, FiltrosTratamientos>('tratamientos'),
 };

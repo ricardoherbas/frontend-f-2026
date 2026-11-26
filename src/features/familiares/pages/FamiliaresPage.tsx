@@ -231,6 +231,7 @@ export default function FamiliaresPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <StateView

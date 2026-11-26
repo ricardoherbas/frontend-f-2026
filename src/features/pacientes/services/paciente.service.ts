@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type {
   DatosActualizarPaciente,
   DatosCrearPaciente,
@@ -16,15 +16,7 @@ export interface FiltrosPacientes {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaPacientesPaginada {
-  datos: Paciente[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaPacientesPaginada = Paginado<Paciente>;
 
 const crudApi = crearCrudApi<
   Paciente,
@@ -35,14 +27,5 @@ const crudApi = crearCrudApi<
 export const pacienteService = {
   ...crudApi,
 
-  listarPaginado: async (
-    filtros: FiltrosPacientes,
-  ): Promise<RespuestaPacientesPaginada> => {
-    const respuesta = await httpClient.get<RespuestaPacientesPaginada>(
-      '/pacientes',
-      { params: filtros },
-    );
-
-    return respuesta.data;
-  },
+  listarPaginado: crearListadoPaginadoApi<Paciente, FiltrosPacientes>('pacientes'),
 };

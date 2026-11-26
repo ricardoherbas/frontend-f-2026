@@ -10,6 +10,7 @@ import { DataTable } from '@/shared/components/DataTable';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { Badge } from '@/shared/components/ui/Badge';
 import { Button } from '@/shared/components/ui/Button';
+import { BotonExportar } from '@/shared/components/BotonExportar';
 import {
   useEliminarTurno,
   useTurnosPaginado,
@@ -258,6 +259,12 @@ export default function TurnosPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
+          <BotonExportar
+            ruta="turnos"
+            filtros={filtros}
+            deshabilitado={isLoading || !data?.datos.length}
+          />
         </div>
 
         <StateView

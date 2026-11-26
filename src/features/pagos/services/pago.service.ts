@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type { EstadoPago } from '@/core/types/estado-pago.type';
 import type { MedioPago } from '@/core/types/medio-pago.type';
 import type {
@@ -20,29 +20,12 @@ export interface FiltrosPagos {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaPagosPaginada {
-  datos: Pago[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaPagosPaginada = Paginado<Pago>;
 
 const crud = crearCrudApi<Pago, DatosCrearPago, DatosActualizarPago>('pagos');
 
 export const pagoService = {
   ...crud,
 
-  listarPaginado: async (
-    filtros: FiltrosPagos,
-  ): Promise<RespuestaPagosPaginada> => {
-    const { data } = await httpClient.get<RespuestaPagosPaginada>(
-      '/pagos',
-      { params: filtros },
-    );
-
-    return data;
-  },
+  listarPaginado: crearListadoPaginadoApi<Pago, FiltrosPagos>('pagos'),
 };

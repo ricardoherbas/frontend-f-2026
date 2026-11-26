@@ -9,6 +9,7 @@ import { DataTable } from '@/shared/components/DataTable';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { Badge } from '@/shared/components/ui/Badge';
 import { Button } from '@/shared/components/ui/Button';
+import { BotonExportar } from '@/shared/components/BotonExportar';
 import { etiquetaTurno } from '@/features/turnos/adapters/turno.adapter';
 import {
   useAsignacionesPaginadas,
@@ -196,6 +197,12 @@ export default function AsignacionesPage() {
           <Button variante="secundario" onClick={imprimirReporte}>
             Imprimir / PDF
           </Button>
+
+          <BotonExportar
+            ruta="asignaciones"
+            filtros={filtros}
+            deshabilitado={isLoading || !data?.datos.length}
+          />
         </div>
 
         <p>

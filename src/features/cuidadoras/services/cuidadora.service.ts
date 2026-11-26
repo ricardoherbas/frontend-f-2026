@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type {
   Cuidadora,
   DatosCrearCuidadora,
@@ -13,15 +13,7 @@ export interface FiltrosCuidadoras {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaCuidadorasPaginada {
-  datos: Cuidadora[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaCuidadorasPaginada = Paginado<Cuidadora>;
 
 const crudApi = crearCrudApi<Cuidadora, DatosCrearCuidadora>(
   'cuidadoras',
@@ -30,15 +22,5 @@ const crudApi = crearCrudApi<Cuidadora, DatosCrearCuidadora>(
 export const cuidadoraService = {
   ...crudApi,
 
-  listarPaginado: async (
-    filtros: FiltrosCuidadoras,
-  ): Promise<RespuestaCuidadorasPaginada> => {
-    const respuesta =
-      await httpClient.get<RespuestaCuidadorasPaginada>(
-        '/cuidadoras',
-        { params: filtros },
-      );
-
-    return respuesta.data;
-  },
+  listarPaginado: crearListadoPaginadoApi<Cuidadora, FiltrosCuidadoras>('cuidadoras'),
 };

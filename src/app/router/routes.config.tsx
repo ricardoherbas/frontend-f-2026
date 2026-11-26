@@ -31,6 +31,8 @@ export const RUTAS_PUBLICAS = [
 ];
 
 export const RUTAS_PRIVADAS: RutaApp[] = [
+  { path: '/inicio', etiqueta: 'Inicio', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/inicio/pages/InicioPage')) },
+
   { path: '/usuarios', etiqueta: 'Usuarios', roles: ADMIN, menu: true, Componente: lazy(() => import('@/features/usuarios/pages/UsuariosPage')) },
 
   { path: '/pacientes', etiqueta: 'Pacientes', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/pacientes/pages/PacientesPage')) },

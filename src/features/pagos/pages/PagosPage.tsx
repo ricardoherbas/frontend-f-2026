@@ -11,6 +11,7 @@ import { DataTable } from '@/shared/components/DataTable';
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog';
 import { Badge } from '@/shared/components/ui/Badge';
 import { Button } from '@/shared/components/ui/Button';
+import { BotonExportar } from '@/shared/components/BotonExportar';
 import { usePacienteOpciones } from '@/shared/hooks/usePacienteOpciones';
 import { formatFecha } from '@/shared/utils/formatFecha';
 import { formatMoneda } from '@/shared/utils/formatMoneda';
@@ -337,6 +338,12 @@ export default function PagosPage() {
           <Button variante="secundario" onClick={imprimirReporte} disabled={pagos.length === 0}>
             Imprimir / guardar PDF
           </Button>
+
+          <BotonExportar
+            ruta="pagos"
+            filtros={filtros}
+            deshabilitado={isLoading || !data?.datos.length}
+          />
         </div>
 
         <StateView

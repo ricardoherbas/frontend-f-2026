@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type {
   DatosActualizarParteDiario,
   DatosCrearParteDiario,
@@ -17,15 +17,7 @@ export interface FiltrosPartesDiarios {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaPartesDiariosPaginada {
-  datos: ParteDiario[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaPartesDiariosPaginada = Paginado<ParteDiario>;
 
 const crudApi = crearCrudApi<
   ParteDiario,
@@ -36,14 +28,5 @@ const crudApi = crearCrudApi<
 export const parteDiarioService = {
   ...crudApi,
 
-  listarPaginado: async (
-    filtros: FiltrosPartesDiarios,
-  ): Promise<RespuestaPartesDiariosPaginada> => {
-    const respuesta = await httpClient.get<RespuestaPartesDiariosPaginada>(
-      '/partesDiarios',
-      { params: filtros },
-    );
-
-    return respuesta.data;
-  },
+  listarPaginado: crearListadoPaginadoApi<ParteDiario, FiltrosPartesDiarios>('partesDiarios'),
 };

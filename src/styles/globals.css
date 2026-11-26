@@ -226,3 +226,39 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .footer { padding: 1rem; }
   .footer-contenido { flex-direction: column; align-items: flex-start; gap: .5rem; }
 }
+
+/* ---------- Acciones del listado (imprimir / exportar) ---------- */
+.acciones-listado { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+.error-exportar { color: var(--peligro); font-size: .9rem; }
+
+/* ---------- Inicio (dashboard) ---------- */
+.seccion-inicio { margin-bottom: 1.75rem; }
+.seccion-inicio > h2 { margin-bottom: .75rem; }
+.acciones-rapidas { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.estadisticas { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.estadistica {
+  display: flex; flex-direction: column; gap: .15rem; padding: .9rem 1rem; text-decoration: none;
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borde);
+  border-left: 4px solid var(--primario); border-radius: var(--radio);
+}
+.estadistica:hover { background: #f7faf9; }
+.estadistica-aviso { border-left-color: var(--aviso); }
+.estadistica-peligro { border-left-color: var(--peligro); }
+.estadistica-ok { border-left-color: var(--ok); }
+.estadistica-valor { font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+.estadistica-etiqueta { font-size: .9rem; color: var(--tinta-suave); font-weight: 600; }
+.estadistica small { color: var(--peligro); }
+
+.dashboard { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+@media (max-width: 480px) { .dashboard { grid-template-columns: 1fr; } }
+.panel-encabezado { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: .75rem; }
+
+.accesos { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.acceso-tarjeta {
+  display: flex; flex-direction: column; gap: .2rem; padding: .9rem 1rem; text-decoration: none;
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio);
+}
+.acceso-tarjeta:hover { background: var(--primario-claro); border-color: var(--primario); }
+.acceso-tarjeta strong { color: var(--primario-oscuro); }
+.acceso-tarjeta span { font-size: .9rem; color: var(--tinta-suave); }

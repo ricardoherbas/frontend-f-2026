@@ -262,6 +262,7 @@ export default function PacientesPage() {
           >
             Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <StateView

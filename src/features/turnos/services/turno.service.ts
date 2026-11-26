@@ -1,5 +1,5 @@
-import { httpClient } from '@/core/api/httpClient';
 import { crearCrudApi } from '@/core/api/crudApi';
+import { crearListadoPaginadoApi, type Paginado } from '@/core/api/paginacion';
 import type {
   DatosActualizarTurno,
   DatosCrearTurno,
@@ -16,15 +16,7 @@ export interface FiltrosTurnos {
   order?: 'ASC' | 'DESC';
 }
 
-export interface RespuestaTurnosPaginada {
-  datos: Turno[];
-  paginacion: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
-}
+export type RespuestaTurnosPaginada = Paginado<Turno>;
 
 const crudApi = crearCrudApi<
   Turno,
@@ -35,14 +27,5 @@ const crudApi = crearCrudApi<
 export const turnoService = {
   ...crudApi,
 
-  listarPaginado: async (
-    filtros: FiltrosTurnos,
-  ): Promise<RespuestaTurnosPaginada> => {
-    const respuesta = await httpClient.get<RespuestaTurnosPaginada>(
-      '/turnos',
-      { params: filtros },
-    );
-
-    return respuesta.data;
-  },
+  listarPaginado: crearListadoPaginadoApi<Turno, FiltrosTurnos>('turnos'),
 };

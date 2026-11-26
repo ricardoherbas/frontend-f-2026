@@ -363,8 +363,9 @@ export default function PartesDiariosPage() {
             disabled={isLoading || partes.length === 0}
             onClick={imprimirPartesDiarios}
           >
-            Exportar PDF
+            Imprimir / guardar PDF
           </Button>
+
         </div>
 
         <StateView
