@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ETIQUETA_ROL } from '@/core/permissions/roles';
+import { ETIQUETA_ROL, type Rol } from '@/core/permissions/roles';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Button } from '@/shared/components/ui/Button';
 import { FormField, FormSelect } from '@/shared/components/FormField';
@@ -28,6 +28,8 @@ interface Props {
     error: string | null;
     onCerrar: () => void;
     onEnviar: (valores: ValoresUsuario) => void;
+    /** roles que se pueden elegir. Si se omite, se ofrecen todos (administrador). Debe ser una referencia estable. */
+    rolesPermitidos?: Rol[];
 }
 
 // un solo formulario para alta y edicion (el schema cambia según el modo).
@@ -44,8 +46,12 @@ interface Campos {
 
 const VACIO: Campos = { nombre: '', apellido: '', dni: '', fecha_nacimiento: '', telefono: '', email: '', rol: '', password: '' };
 
-export function UsuarioFormModal({ abierto, usuario, enviando, error, onCerrar, onEnviar }: Props) {
+const TODOS_LOS_ROLES = Object.keys(ETIQUETA_ROL) as Rol[];
+
+export function UsuarioFormModal({ abierto, usuario, enviando, error, onCerrar, onEnviar, rolesPermitidos = TODOS_LOS_ROLES }: Props) {
     const editando = usuario !== null;
+    // con un único rol posible (secretaria -> familiar) queda preseleccionado en el alta.
+    const rolInicial: Campos['rol'] = rolesPermitidos.length === 1 ? rolesPermitidos[0] : '';
     const {
         register,
         handleSubmit,
@@ -71,9 +77,9 @@ export function UsuarioFormModal({ abierto, usuario, enviando, error, onCerrar, 
             rol: usuario.rol,
             password: '',
             }
-            : VACIO,
+            : { ...VACIO, rol: rolInicial },
         );
-   }, [abierto, usuario, reset]);
+   }, [abierto, usuario, reset, rolInicial]);
 
     const alEnviar = handleSubmit((v) => {
         const { password, fecha_nacimiento, telefono, ...resto } = v;
@@ -98,8 +104,8 @@ export function UsuarioFormModal({ abierto, usuario, enviando, error, onCerrar, 
             <FormField etiqueta="Fecha de nacimiento (opcional)" type="date" error={errors.fecha_nacimiento?.message} {...register('fecha_nacimiento')} />
             <FormSelect etiqueta="Rol" error={errors.rol?.message} {...register('rol')}>
                 <option value="" disabled>Elegí un rol</option>
-                {Object.entries(ETIQUETA_ROL).map(([valor, texto]) => (
-                <option key={valor} value={valor}>{texto}</option>
+                {rolesPermitidos.map((valor) => (
+                <option key={valor} value={valor}>{ETIQUETA_ROL[valor]}</option>
                 ))}
             </FormSelect>
             <FormField etiqueta="Email" type="email" error={errors.email?.message} {...register('email')} />

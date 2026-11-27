@@ -17,7 +17,6 @@ export interface RutaApp {
 }
 
 const TODOS: Rol[] = ['administrador', 'secretaria', 'cuidadora', 'familiar'];
-const ADMIN: Rol[] = ['administrador'];
 const ADMIN_SEC: Rol[] = ['administrador', 'secretaria'];
 const ADMIN_SEC_CUID: Rol[] = ['administrador', 'secretaria', 'cuidadora'];
 const ADMIN_SEC_FAM: Rol[] = ['administrador', 'secretaria', 'familiar'];
@@ -33,7 +32,7 @@ export const RUTAS_PUBLICAS = [
 export const RUTAS_PRIVADAS: RutaApp[] = [
   { path: '/inicio', etiqueta: 'Inicio', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/inicio/pages/InicioPage')) },
 
-  { path: '/usuarios', etiqueta: 'Usuarios', roles: ADMIN, menu: true, Componente: lazy(() => import('@/features/usuarios/pages/UsuariosPage')) },
+  { path: '/usuarios', etiqueta: 'Usuarios', roles: ADMIN_SEC, menu: true, Componente: lazy(() => import('@/features/usuarios/pages/UsuariosPage')) },
 
   { path: '/pacientes', etiqueta: 'Pacientes', roles: TODOS, menu: true, Componente: lazy(() => import('@/features/pacientes/pages/PacientesPage')) },
   { path: '/pacientes/nuevo', etiqueta: 'Nuevo paciente', roles: ADMIN_SEC, Componente: lazy(() => import('@/features/pacientes/pages/PacienteFormPage')) },

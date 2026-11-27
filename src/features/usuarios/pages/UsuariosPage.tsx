@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/core/auth/useAuth';
 import { obtenerMensajeError } from '@/core/api/errors';
-import { ETIQUETA_ROL } from '@/core/permissions/roles';
+import { ETIQUETA_ROL, type Rol } from '@/core/permissions/roles';
 import { PageHeader } from '@/shared/components/PageHeader';
 import { StateView } from '@/shared/components/StateView';
 import { DataTable } from '@/shared/components/DataTable';
@@ -14,6 +15,10 @@ import type { Usuario } from '../interfaces/usuario.interface';
 
 const CLAVE = ['usuarios'];
 
+// la secretaria solo gestiona cuentas de cuidadoras (el backend lo valida también).
+// los familiares se dan de alta desde Familiares y crean su cuenta por QR.
+const ROLES_SECRETARIA: Rol[] = ['cuidadora'];
+
 const normalizar = (valor: string): string =>
   valor
     .normalize('NFD')
@@ -23,7 +28,8 @@ const normalizar = (valor: string): string =>
 
 export default function UsuariosPage() {
   const qc = useQueryClient();
-  const { usuario: yo } = useAuth();
+  const { usuario: yo, rol } = useAuth();
+  const esSecretaria = rol === 'secretaria';
 
   const { data, isLoading, error } = useQuery({
     queryKey: CLAVE,
@@ -68,7 +74,7 @@ export default function UsuariosPage() {
       : `Persona #${u.persona_id}`;
 
   const usuariosFiltrados = useMemo(() => {
-    const usuarios = data ?? [];
+    const usuarios = (data ?? []).filter((u) => !esSecretaria || u.rol === 'cuidadora');
     const termino = normalizar(busqueda);
 
     if (!termino) {
@@ -90,23 +96,34 @@ export default function UsuariosPage() {
         (campo) => campo && normalizar(String(campo)).includes(termino),
       );
     });
-  }, [data, busqueda]);
+  }, [data, busqueda, esSecretaria]);
 
   return (
     <>
       <PageHeader
         titulo="Usuarios"
-        descripcion="Cuentas del sistema. Cada alta crea también a la persona y su perfil."
+        descripcion={
+          esSecretaria
+            ? 'Cuentas de cuidadoras. Los pacientes no tienen cuenta: se dan de alta desde su propia ficha.'
+            : 'Cuentas del sistema. Cada alta crea también a la persona y su perfil.'
+        }
         accion={
-          <Button
-            onClick={() => {
-              setErrorForm(null);
-              setAviso(null);
-              setFormulario(null);
-            }}
-          >
-            Nuevo usuario
-          </Button>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            {esSecretaria && (
+              <Link className="btn btn-secundario" to="/pacientes/nuevo">
+                Nuevo paciente
+              </Link>
+            )}
+            <Button
+              onClick={() => {
+                setErrorForm(null);
+                setAviso(null);
+                setFormulario(null);
+              }}
+            >
+              {esSecretaria ? 'Nueva cuidadora' : 'Nuevo usuario'}
+            </Button>
+          </div>
         }
       />
 
@@ -218,6 +235,7 @@ export default function UsuariosPage() {
       <UsuarioFormModal
         abierto={formulario !== undefined}
         usuario={formulario ?? null}
+        rolesPermitidos={esSecretaria ? ROLES_SECRETARIA : undefined}
         enviando={guardar.isPending}
         error={errorForm}
         onCerrar={() => setFormulario(undefined)}
